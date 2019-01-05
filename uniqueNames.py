@@ -34,27 +34,23 @@ def normilizeArtist(str):
     return re.sub('\(.*\)', '', str).lower().replace(' ', '')
 
 
-dirpath = os.path.expanduser("C:\\Users\\KAS\\Documents\\dev\\lena\\songs_from_rap")
-for path in glob(os.path.join(dirpath, '*.json')):
-    file = open(path, mode="r", encoding="maccyrillic")
-    data = json.load(file)
-    artist = urllib.parse.unquote(data["artist"]).encode('maccyrillic').decode('utf-8')
-    if not (bool(patternFeat.match(artist)) or bool(patternFeat2.match(artist))):
-        artists.add(normilizeArtist(artist))
+def findUniqueName(dirpath):
+    # dirpath = os.path.expanduser("C:\\Users\\KAS\\Documents\\dev\\lena\\songs_from_rap")
+    for path in glob(os.path.join(os.path.expanduser(dirpath), '*.json')):
+        file = open(path, mode="r", encoding="maccyrillic")
+        data = json.load(file)
+        artist = urllib.parse.unquote(data["artist"]).encode('maccyrillic').decode('utf-8')
+        if not (bool(patternFeat.match(artist)) or bool(patternFeat2.match(artist))):
+            artists.add(normilizeArtist(artist))
 
-artList = list(sorted(artists))
+    artList = list(sorted(artists))
 
-for art in artList:
-    print(art)
+    for i in range(0, len(artList) - 1):
+        for j in range(i + 1, len(artList)):
+            if levenshtein(artList[i], artList[j]) < 3:
+                artList[j] = FLAG_ABOUT_REPEAT
 
-print("----------------------------------")
+    return list(set(artList) - set([FLAG_ABOUT_REPEAT]))
 
-for i in range(0, len(artList) - 1):
-    for j in range(i + 1, len(artList)):
-        if levenshtein(artList[i], artList[j]) < 3:
-            artList[j] = FLAG_ABOUT_REPEAT
-
-artList = list(set(artList) - set([FLAG_ABOUT_REPEAT]))
-
-for art in sorted(artList):
-    print(art)
+# for art in sorted(artList):
+#     print(art)
