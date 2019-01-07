@@ -15,7 +15,7 @@ def text_stemming(raw_text, wordDict = None):
 
   clean_text = []
 
-  raw_text=raw_text.replace('\t', ' ').replace('\n', ' ').replace('\r', '')
+  raw_text=raw_text.replace('\t', ' ').replace('\n', ' ').replace('\r', '').replace('–', '')
   for punctuation in string.punctuation:
     raw_text = raw_text.replace(punctuation, ' ')
   raw_text = raw_text.split()
