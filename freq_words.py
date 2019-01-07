@@ -30,9 +30,15 @@ if __name__ == '__main__':
     with worker.make_runner() as runner:
         runner.run()
         for key, value in worker.parse_output(runner.cat_output()):
-            result[key] = value
+            if len(key) > 2:
+                result[key] = int(value)
 
+        result.pop('artist', None)
+        result.pop('texts', None)
+        countRows = 0
         with open(sys.argv[2], 'w') as f:
             for item in sorted(result.items(), key=operator.itemgetter(1), reverse=True):
-                f.write(item[0] + " " + item[1] + "\n")
+                if countRows < 1000:
+                    f.write(item[0] + " " + str(item[1]) + "\n")
+                    countRows+=1
 
