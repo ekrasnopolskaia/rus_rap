@@ -2,8 +2,7 @@ import json
 import os
 from glob import glob
 import re
-from transliterate import translit, get_available_language_codes
-from pprint import pprint
+from transliterate import translit
 import urllib.parse
 
 FLAG_ABOUT_REPEAT = 'hvjkbvjkjkbjkerk'
@@ -36,7 +35,6 @@ def normilizeArtist(str):
 
 
 def findUniqueName(dirpath):
-    # dirpath = os.path.expanduser("C:\\Users\\KAS\\Documents\\dev\\lena\\songs_from_rap")
     for path in glob(os.path.join(os.path.expanduser(dirpath), '*.json')):
         file = open(path, mode="r", encoding="maccyrillic")
         data = json.load(file)
@@ -52,8 +50,6 @@ def findUniqueName(dirpath):
                 artList[j] = FLAG_ABOUT_REPEAT
 
     return list(set(artList) - set([FLAG_ABOUT_REPEAT]))
-
-# print(findUniqueName("C:\\Users\\KAS\\Documents\\dev\\lena\\rus_rap\\songs"))
 
 # for art in sorted(findUniqueName("C:\\Users\\KAS\\Documents\\dev\\lena\\rus_rap\\songs")):
 #     print(art)

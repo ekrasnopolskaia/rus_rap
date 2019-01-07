@@ -11,17 +11,17 @@ DIR_PATH_TEXTS = ".\\songs"
 
 countTexts = 0
 
-# for path in glob(os.path.join(os.path.expanduser(DIR_PATH_TEXTS), '*.json')):
-#     file = open(path, mode="r", encoding="maccyrillic")
-#     data = json.load(file)
-#     text = text_stemming(
-#         urllib.parse.unquote(' '.join(data['text'])).encode('maccyrillic').decode('utf-8', errors="ignore"))
-#     # print(text)
-#     texts.append(text.split())
-#     countTexts += 1
-#     if countTexts % 100 == 0:
-#         print("Complete: " + str(countTexts))
-#
-# # with open('for_lda.json', 'w', encoding='utf-8') as filehandle:
-# #     json.dump(texts, filehandle, ensure_ascii=False)
+for path in glob(os.path.join(os.path.expanduser(DIR_PATH_TEXTS), '*.json')):
+    file = open(path, mode="r", encoding="maccyrillic")
+    data = json.load(file)
+    text = text_stemming(
+        urllib.parse.unquote(' '.join(data['text'])).encode('maccyrillic').decode('utf-8', errors="ignore"))
+    # print(text)
+    texts.append(text.split())
+    countTexts += 1
+    if countTexts % 1 == 0:
+        print("Complete: " + str(countTexts))
+
+with open('for_lda.json', 'w', encoding='utf-8') as filehandle:
+    json.dump(texts, filehandle, ensure_ascii=False)
 

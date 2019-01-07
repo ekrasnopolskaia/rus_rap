@@ -6,7 +6,6 @@ import re
 
 WORD_RE = re.compile(r"[A-Za-zА-Яа-я]+")
 
-
 class MRWordFreqCount(MRJob):
     OUTPUT_PROTOCOL = ReprProtocol
 
@@ -19,7 +18,6 @@ class MRWordFreqCount(MRJob):
 
     def reducer(self, word, counts):
         yield word, str(sum(counts))
-
 
 if __name__ == '__main__':
     worker = MRWordFreqCount()
@@ -40,5 +38,4 @@ if __name__ == '__main__':
             for item in sorted(result.items(), key=operator.itemgetter(1), reverse=True):
                 if countRows < 1000:
                     f.write(item[0] + " " + str(item[1]) + "\n")
-                    countRows+=1
-
+                    countRows += 1

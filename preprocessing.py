@@ -45,10 +45,6 @@ def main_func():
 
     print(docCollection)
 
-    # file = open(".\\songs\\$APER__Welcome_2_Moscow.json", mode="r", encoding="maccyrillic")
-    # data = json.load(file)
-    # text = urllib.parse.unquote(' '.join(data['text'])).encode('maccyrillic').decode('utf-8')
-
     for path in glob(os.path.join(os.path.expanduser(DIR_PATH), '*.json')):
         file = open(path, mode="r", encoding="maccyrillic")
         data = json.load(file)
