@@ -2,6 +2,7 @@ import json
 import os
 from glob import glob
 import re
+from transliterate import translit, get_available_language_codes
 from pprint import pprint
 import urllib.parse
 
@@ -31,7 +32,7 @@ def levenshtein(s1, s2):
 
 
 def normilizeArtist(str):
-    return re.sub('\(.*\)', '', str).lower().replace(' ', '')
+    return translit(re.sub('\(.*\)', '', str).lower().replace(' ', ''), "ru")
 
 
 def findUniqueName(dirpath):
@@ -41,16 +42,18 @@ def findUniqueName(dirpath):
         data = json.load(file)
         artist = urllib.parse.unquote(data["artist"]).encode('maccyrillic').decode('utf-8')
         if not (bool(patternFeat.match(artist)) or bool(patternFeat2.match(artist))):
-            artists.add(normilizeArtist(artist))
+            artists.add(artist)
 
     artList = list(sorted(artists))
 
     for i in range(0, len(artList) - 1):
         for j in range(i + 1, len(artList)):
-            if levenshtein(artList[i], artList[j]) < 3:
+            if levenshtein(normilizeArtist(artList[i]), normilizeArtist(artList[j])) < 3:
                 artList[j] = FLAG_ABOUT_REPEAT
 
     return list(set(artList) - set([FLAG_ABOUT_REPEAT]))
 
-# for art in sorted(artList):
+# print(findUniqueName("C:\\Users\\KAS\\Documents\\dev\\lena\\rus_rap\\songs"))
+
+# for art in sorted(findUniqueName("C:\\Users\\KAS\\Documents\\dev\\lena\\rus_rap\\songs")):
 #     print(art)
