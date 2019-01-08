@@ -3,8 +3,7 @@ import urllib
 from glob import glob
 import os
 from rus_rap.preprocessing import text_stemming
-from gensim import corpora, models, similarities
-import numpy as np
+
 
 texts = list()
 DIR_PATH_TEXTS = ".\\songs"

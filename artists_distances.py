@@ -2,6 +2,9 @@ import json
 from glob import glob
 import os
 import urllib.parse
+
+import networkx as nx
+
 from rus_rap.preprocessing import text_stemming
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -58,26 +61,34 @@ print(terms)
 dist = 1 - cosine_similarity(tfidf_matrix)
 print(dist)
 
-mds = MDS(n_components=2, dissimilarity="precomputed", random_state=1)
-pos = mds.fit_transform(dist)  # shape (n_components, n_samples)
-xs, ys = pos[:, 0], pos[:, 1]
-print(xs)
-print(ys)
+G = nx.Graph()
 
-df = pd.DataFrame(dict(x=xs, y=ys, name=listArt[:, 0]))
+for i in range(len(dist)):
+    for j in range(i + 1, len(dist)):
+        G.add_edge(listArt[i, 0], listArt[j, 0], weight=dist[i][j])
 
-df.to_csv("results.csv", sep='\t', encoding='utf-8')
+nx.drawing.nx_pylab.draw_kamada_kawai(G, edge_color="#FFFFFF", with_labels=True)
 
-fig, ax = plt.subplots(figsize=(17, 9)) # set size
-ax.margins(0.05)
-
-for index, row in df.iterrows():
-    ax.plot(row['x'], row['y'], marker='o', linestyle='', ms=12, color='#66ff99', mec='none')
-    ax.set_aspect('auto')
-    ax.tick_params(axis='x', which='both', bottom='off', top='off', labelbottom='off')
-    ax.tick_params(axis='y', which='both', left='off', top='off', labelleft='off')
-
-for i in range(len(df)):
-    ax.text(df.ix[i]['x'], df.ix[i]['y'], df.ix[i]['name'], size=8)
-
-plt.show()
+# mds = MDS(n_components=2, dissimilarity="precomputed", random_state=1)
+# pos = mds.fit_transform(dist)  # shape (n_components, n_samples)
+# xs, ys = pos[:, 0], pos[:, 1]
+# print(xs)
+# print(ys)
+#
+# df = pd.DataFrame(dict(x=xs, y=ys, name=listArt[:, 0]))
+#
+# df.to_csv("results.csv", sep='\t', encoding='utf-8')
+#
+# fig, ax = plt.subplots(figsize=(17, 9)) # set size
+# ax.margins(0.05)
+#
+# for index, row in df.iterrows():
+#     ax.plot(row['x'], row['y'], marker='o', linestyle='', ms=12, color='#66ff99', mec='none')
+#     ax.set_aspect('auto')
+#     ax.tick_params(axis='x', which='both', bottom='off', top='off', labelbottom='off')
+#     ax.tick_params(axis='y', which='both', left='off', top='off', labelleft='off')
+#
+# for i in range(len(df)):
+#     ax.text(df.ix[i]['x'], df.ix[i]['y'], df.ix[i]['name'], size=8)
+#
+# plt.show()
